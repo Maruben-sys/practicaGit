@@ -19,57 +19,52 @@ namespace ejercicioTelegrama
 
         private void btnCalcular_Click(object sender, EventArgs e)
         {
-            string textoTelegrama;
-            char tipoTelegrama = 'o'; // Por defecto ordinario
-            int numPalabras = 0;
-            double coste;
+            // 1. Tomar texto de la caja
+            string texto = txtTelegrama.Text;
 
-            // Leo el telegrama
-            textoTelegrama = txtTelegrama.Text.Trim();
+            // 2. Contar palabras básico
+            int palabras = 0;
+            if (texto.Length > 0)
+            {
+                palabras = 1; // Al menos una palabra
 
-            // Determino si es urgente u ordinario
-            if (chkUrgente.Checked)
-            {
-                tipoTelegrama = 'u';
-            }
-            else
-            {
-                tipoTelegrama = 'o';
-            }
-
-            // Obtengo el número de palabras que forma el telegrama
-            // Divido por espacios y filtro elementos vacíos
-            if (!string.IsNullOrWhiteSpace(textoTelegrama))
-            {
-                numPalabras = textoTelegrama.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
-            }
-
-            // Calculo el coste según el tipo de telegrama
-            if (tipoTelegrama == 'o') // Telegrama ordinario
-            {
-                if (numPalabras <= 10)
+                for (int i = 0; i < texto.Length; i++)
                 {
-                    coste = 2.5;
+                    if (texto[i] == ' ' && i + 1 < texto.Length && texto[i + 1] != ' ')
+                    {
+                        palabras++;
+                    }
+                }
+            }
+
+            // 3. Ver si es urgente
+            double precio;
+
+            if (chkUrgente.Checked == true) // URGENTE
+            {
+                if (palabras <= 10)
+                {
+                    precio = 5.0;
                 }
                 else
                 {
-                    coste = 2.5 + 0.5 * (numPalabras - 10);
+                    precio = 5.0 + (palabras - 10) * 0.75;
                 }
             }
-            else // Telegrama urgente
+            else // ORDINARIO
             {
-                if (numPalabras <= 10)
+                if (palabras <= 10)
                 {
-                    coste = 5;
+                    precio = 2.5;
                 }
                 else
                 {
-                    coste = 5 + 0.75 * (numPalabras - 10);
+                    precio = 2.5 + (palabras - 10) * 0.5;
                 }
             }
 
-            // Muestro el precio
-            txtPrecio.Text = coste.ToString("F2") + " euros";
+            // 4. Mostrar precio
+            txtPrecio.Text = precio.ToString("N2") + " euros";
         }
     }
     }
