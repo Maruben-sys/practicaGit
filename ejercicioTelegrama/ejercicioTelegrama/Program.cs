@@ -10,6 +10,7 @@ namespace ejercicioTelegrama
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
