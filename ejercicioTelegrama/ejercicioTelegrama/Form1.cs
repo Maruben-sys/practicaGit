@@ -20,20 +20,32 @@ namespace ejercicioTelegrama
         private void btnCalcular_Click(object sender, EventArgs e)
         {
             string textoTelegrama;
-            char tipoTelegrama = ' ';
+            char tipoTelegrama = 'o'; // Por defecto ordinario
             int numPalabras = 0;
             double coste;
-            //Leo el telegrama
-            textoTelegrama = txtTelegrama.Text;
-            // telegrama urgente?
+
+            // Leo el telegrama
+            textoTelegrama = txtTelegrama.Text.Trim();
+
+            // Determino si es urgente u ordinario
             if (chkUrgente.Checked)
             {
                 tipoTelegrama = 'u';
             }
-            //Obtengo el número de palabras que forma el telegrama
-            numPalabras = textoTelegrama.Length;
-            //Si el telegrama es ordinario
-            if (tipoTelegrama == 'o')
+            else
+            {
+                tipoTelegrama = 'o';
+            }
+
+            // Obtengo el número de palabras que forma el telegrama
+            // Divido por espacios y filtro elementos vacíos
+            if (!string.IsNullOrWhiteSpace(textoTelegrama))
+            {
+                numPalabras = textoTelegrama.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            }
+
+            // Calculo el coste según el tipo de telegrama
+            if (tipoTelegrama == 'o') // Telegrama ordinario
             {
                 if (numPalabras <= 10)
                 {
@@ -41,31 +53,25 @@ namespace ejercicioTelegrama
                 }
                 else
                 {
-                    coste = 0.5 * numPalabras;
+                    coste = 2.5 + 0.5 * (numPalabras - 10);
                 }
             }
-            else
-            //Si el telegrama es urgente
+            else // Telegrama urgente
             {
-                if (tipoTelegrama == 'u')
+                if (numPalabras <= 10)
                 {
-                    if (numPalabras <= 10)
-                    {
-                        coste = 5;
-                    }
-                    else
-                    {
-                        coste = 5 + 0.75 * (numPalabras - 10);
-                    }
+                    coste = 5;
                 }
                 else
                 {
-                    coste = 0;
+                    coste = 5 + 0.75 * (numPalabras - 10);
                 }
             }
-            txtPrecio.Text = coste.ToString() + " euros";
+
+            // Muestro el precio
+            txtPrecio.Text = coste.ToString("F2") + " euros";
         }
-        }
+    }
     }
     
 
